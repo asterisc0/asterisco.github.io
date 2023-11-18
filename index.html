@@ -70,6 +70,12 @@
 
                 // Limpiar el campo de entrada después de enviar el mensaje
                 messageInput.value = '';
+
+                // Almacenar la información en localStorage
+                localStorage.setItem('lastChatMessage', message);
+
+                // Redirigir a la página de información del usuario
+                window.location.href = 'info.html';
             }
         }
     </script>
