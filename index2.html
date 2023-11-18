@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Usuario</title>
+</head>
+<body>
+    <h1>Información del Usuario</h1>
+
+    <p>La dirección IP del usuario es: <span id="user-ip"></span></p>
+    <p>Navegador: <span id="browser-info"></span></p>
+    <p>Sistema Operativo: <span id="os-info"></span></p>
+    <p>Resolución de pantalla: <span id="screen-resolution"></span></p>
+    <p>Localización (latitud, longitud): <span id="geolocation"></span></p>
+    
+    <h2>Último mensaje del chat:</h2>
+    <p id="chat-message"></p>
+
+    <!-- Puedes personalizar y agregar más contenido según tus necesidades -->
+
+    <script>
+        // Obtener la dirección IP del usuario y mostrarla
+        fetch('https://api64.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                var userIpElement = document.getElementById('user-ip');
+                userIpElement.textContent = data.ip;
+            })
+            .catch(error => console.error('Error al obtener la dirección IP:', error));
+
+        // Obtener información sobre el navegador y el sistema operativo del usuario
+        var browserInfoElement = document.getElementById('browser-info');
+        var osInfoElement = document.getElementById('os-info');
+
+        browserInfoElement.textContent = navigator.userAgent;
+
+        // Utilizar el objeto navigator para obtener información adicional si es posible
+        if (navigator.platform) {
+            osInfoElement.textContent = navigator.platform;
+        } else {
+            osInfoElement.textContent = 'No disponible';
+        }
+
+        // Obtener y mostrar la resolución de pantalla
+        var screenResolutionElement = document.getElementById('screen-resolution');
+        screenResolutionElement.textContent = window.screen.width + 'x' + window.screen.height;
+
+        // Obtener y mostrar la localización geográfica (latitud, longitud)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var geolocationElement = document.getElementById('geolocation');
+                geolocationElement.textContent = position.coords.latitude + ', ' + position.coords.longitude;
+            }, function(error) {
+                console.error('Error al obtener la localización:', error);
+            });
+        } else {
+            var geolocationElement = document.getElementById('geolocation');
+            geolocationElement.textContent = 'No disponible';
+        }
+
+        // Obtener y mostrar el último mensaje del chat almacenado en localStorage
+        var chatMessage = localStorage.getItem('lastChatMessage');
+        var chatMessageElement = document.getElementById('chat-message');
+
+        if (chatMessage) {
+            chatMessageElement.textContent = chatMessage;
+        } else {
+            chatMessageElement.textContent = 'No hay mensajes del chat.';
+        }
+    </script>
+</body>
+</html>
